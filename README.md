@@ -1,6 +1,7 @@
 # DRAFT PROJECT
 
 # WinTodoNag
+This repository currently contains an empty WPF project structure.
 
 **WinTodoNag** is a standalone Windows task management app with hierarchical tasks, persistent reminders, and a focus on being “usefully annoying.”
 It is designed to help you actually *do* your tasks instead of forgetting them.
