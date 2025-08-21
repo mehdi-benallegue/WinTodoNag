@@ -1,0 +1,29 @@
+version: 1
+settings:
+dataFilePath: "C:\\Users\\Mehdi\\Documents\\WinTodoNag\\todo.yaml"
+runAtStartup: true
+minimizeToTray: true
+allowQuitFromTray: false
+tasks:
+- id: "t-001"
+title: "Renew passport"
+notes: "Bring photos"
+createdAt: "2025-08-21T09:12:03+09:00"
+deadlineAt: "2025-09-15T23:59:00+09:00"
+firstNotificationAt: "2025-08-25T09:00:00+09:00"
+nextNotificationAt: "2025-08-25T09:00:00+09:00"
+notificationMode: "nag"
+completedAt: null
+completedOrigin: null
+subtasks:
+- id: "t-001-1"
+title: "Take photos"
+notes: "ID booth"
+createdAt: "2025-08-21T09:12:03+09:00"
+deadlineAt: "2025-09-05T18:00:00+09:00"
+firstNotificationAt: "2025-08-23T09:00:00+09:00"
+nextNotificationAt: "2025-08-23T09:00:00+09:00"
+notificationMode: "toast"
+completedAt: null
+completedOrigin: null
+subtasks: []

@@ -1,0 +1,20 @@
+<Window x:Class="WinTodoNag.Views.NagDialog"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="Reminder" SizeToContent="WidthAndHeight" Topmost="True"
+WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+<StackPanel Margin="14" MinWidth="380">
+<TextBlock Text="{Binding Title}" FontWeight="Bold" FontSize="16"/>
+<TextBlock Text="{Binding Notes}" TextWrapping="Wrap" Margin="0,6,0,6"/>
+<TextBlock Text="{Binding CountdownText}" Foreground="DarkSlateGray"/>
+<StackPanel Orientation="Horizontal" Margin="0,8,0,0" >
+<ComboBox ItemsSource="{Binding SnoozeChoices}" SelectedItem="{Binding SelectedSnooze}" Width="180"/>
+<Button Content="Snooze" Command="{Binding SnoozeCommand}" Margin="6,0,0,0"/>
+<Button Content="Custom…" Command="{Binding CustomSnoozeCommand}" Margin="6,0,0,0"/>
+<Button Content="Complete" Command="{Binding CompleteCommand}" Margin="6,0,0,0"/>
+<Button Content="Open Task" Command="{Binding OpenTaskCommand}" Margin="6,0,0,0"/>
+</StackPanel>
+<TextBlock Text="Will ring again in …" Margin="0,6,0,0" Visibility="{Binding PreviewNextVisible}"/>
+<TextBlock Text="{Binding PreviewNextText}" FontStyle="Italic" Visibility="{Binding PreviewNextVisible}"/>
+</StackPanel>
+</Window>

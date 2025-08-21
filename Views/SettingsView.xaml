@@ -1,0 +1,14 @@
+<UserControl x:Class="WinTodoNag.Views.SettingsView"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<StackPanel Margin="10" >
+<TextBlock Text="Data file:"/>
+<StackPanel Orientation="Horizontal" >
+<TextBox Text="{Binding DataFilePath, Mode=TwoWay}" Width="420"/>
+<Button Content="Browse" Command="{Binding BrowseDataFileCommand}" Margin="6,0"/>
+</StackPanel>
+<CheckBox Content="Run at startup" IsChecked="{Binding RunAtStartup, Mode=TwoWay}"/>
+<CheckBox Content="Minimize to tray" IsChecked="{Binding MinimizeToTray, Mode=TwoWay}"/>
+<CheckBox Content="Allow quitting from tray" IsChecked="{Binding AllowQuitFromTray, Mode=TwoWay}"/>
+</StackPanel>
+</UserControl>

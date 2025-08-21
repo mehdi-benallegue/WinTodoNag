@@ -1,0 +1,32 @@
+<Window x:Class="WinTodoNag.Views.TaskEditorDialog"
+xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+Title="Edit Task" SizeToContent="WidthAndHeight"
+WindowStartupLocation="CenterOwner">
+<StackPanel Margin="12" MinWidth="420">
+<TextBlock Text="Title"/>
+<TextBox Text="{Binding Title, Mode=TwoWay}"/>
+<TextBlock Text="Notes" Margin="0,8,0,0"/>
+<TextBox Text="{Binding Notes, Mode=TwoWay}" AcceptsReturn="True" Height="90"/>
+<StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+<StackPanel Margin="0,0,12,0">
+<TextBlock Text="Deadline"/>
+<DatePicker SelectedDate="{Binding DeadlineDate, Mode=TwoWay}" />
+<TextBox Text="{Binding DeadlineTime, Mode=TwoWay}" Width="100" ToolTip="HH:mm"/>
+</StackPanel>
+<StackPanel>
+<TextBlock Text="First notification"/>
+<DatePicker SelectedDate="{Binding FirstNotifDate, Mode=TwoWay}" />
+<TextBox Text="{Binding FirstNotifTime, Mode=TwoWay}" Width="100" ToolTip="HH:mm"/>
+</StackPanel>
+</StackPanel>
+<StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+<TextBlock Text="Notification mode:" VerticalAlignment="Center"/>
+<ComboBox ItemsSource="{Binding NotificationModes}" SelectedItem="{Binding NotificationMode, Mode=TwoWay}" Margin="8,0,0,0" Width="120"/>
+</StackPanel>
+<StackPanel Orientation="Horizontal" Margin="0,12,0,0" HorizontalAlignment="Right">
+<Button Content="Save" IsDefault="True" Command="{Binding SaveCommand}" Margin="0,0,6,0"/>
+<Button Content="Cancel" IsCancel="True"/>
+</StackPanel>
+</StackPanel>
+</Window>
