@@ -14,26 +14,25 @@ namespace WinTodoNag.ViewModels
     public string Title { get; set; } = string.Empty;
     public string Notes { get; set; } = string.Empty;
 
-    // Internal canonical fields (offset-aware)
+    // Offset-aware canonical fields
     public DateTimeOffset? DeadlineDateOffset { get; set; }
-    public DateTimeOffset? FirstNotifDateOffset { get; set; } = TP.Now().Date;
+    public DateTimeOffset? FirstNotifDateOffset { get; set; } = new DateTimeOffset(TP.Now().Date, TP.Now().Offset);
 
-    // DatePicker-friendly proxies (DateTime?):
-    // We map to local calendar date only; the time comes from the HH:mm string fields.
+    // DatePicker-friendly proxies
     public DateTime? DeadlineDateLocal
     {
-      get => DeadlineDateOffset?.Date;                      // DateTimeOffset.Date returns DateTime
+      get => DeadlineDateOffset?.Date;
       set => DeadlineDateOffset = value.HasValue
-          ? new DateTimeOffset(value.Value.Date, TP.Now().Offset)
-          : (DateTimeOffset?)null;
+        ? new DateTimeOffset(value.Value.Date, TP.Now().Offset)
+        : (DateTimeOffset?)null;
     }
 
     public DateTime? FirstNotifDateLocal
     {
       get => FirstNotifDateOffset?.Date;
       set => FirstNotifDateOffset = value.HasValue
-          ? new DateTimeOffset(value.Value.Date, TP.Now().Offset)
-          : (DateTimeOffset?)null;
+        ? new DateTimeOffset(value.Value.Date, TP.Now().Offset)
+        : (DateTimeOffset?)null;
     }
 
     public string DeadlineTime { get; set; } = "18:00";

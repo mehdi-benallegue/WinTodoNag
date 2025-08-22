@@ -1,5 +1,5 @@
 using System;
-using TP = WinTodoNag.Services.TimeProvider; // << alias
+using TP = WinTodoNag.Services.TimeProvider;
 
 namespace WinTodoNag.Utils
 {
@@ -8,14 +8,19 @@ namespace WinTodoNag.Utils
     public static DateTimeOffset StartOfMonth(this DateTimeOffset dt)
       => new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, dt.Offset);
 
+    public static DateTime CombineDateAndTime(this DateTime date, string hhmm)
+    {
+      if (!TimeSpan.TryParse(hhmm, out var t))
+        t = new TimeSpan(9, 0, 0);
+      return new DateTime(date.Year, date.Month, date.Day, t.Hours, t.Minutes, t.Seconds);
+    }
+
     public static DateTimeOffset CombineTime(this DateTimeOffset date, string hhmm)
     {
-      // Parse "HH:mm" safely; default to 09:00 if parsing fails
+      // Keep the same calendar date and the same offset
       if (!TimeSpan.TryParse(hhmm, out var t))
         t = new TimeSpan(9, 0, 0);
 
-      // IMPORTANT: construct a DateTimeOffset with the SAME calendar date and SAME offset,
-      // without adding the offset as a duration.
       return new DateTimeOffset(
         date.Year, date.Month, date.Day,
         t.Hours, t.Minutes, t.Seconds,
@@ -58,7 +63,6 @@ namespace WinTodoNag.Utils
     }
 
     public static DateTime StartOfMonth(this DateTime dt)
-  => new DateTime(dt.Year, dt.Month, 1);
-
+      => new DateTime(dt.Year, dt.Month, 1);
   }
 }

@@ -1,11 +1,13 @@
 using System.IO;
 
-
 namespace WinTodoNag.Services
 {
   public static class BackupService
   {
-    public static void RotateBackups(string path, int count = 3)
+    /// <summary>
+    /// Keeps N rolling backups alongside the main file.
+    /// </summary>
+    public static void RotateBackups(string path, int count = 10)
     {
       if (!File.Exists(path)) return;
       for (int i = count; i >= 1; i--)
