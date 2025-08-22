@@ -25,7 +25,11 @@ namespace WinTodoNag.ViewModels
     {
       SaveCommand = new RelayCommand(w =>
       {
-        if (string.IsNullOrWhiteSpace(Title)) { MessageBox.Show("Title required"); return; }
+        if (string.IsNullOrWhiteSpace(Title))
+        {
+          System.Windows.MessageBox.Show("Title required");
+          return;
+        }
         if (w is Window win) win.DialogResult = true;
       });
     }

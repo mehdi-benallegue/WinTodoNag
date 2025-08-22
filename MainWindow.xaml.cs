@@ -3,7 +3,7 @@ using System.Windows;
 
 namespace WinTodoNag
 {
-  public partial class MainWindow : Window
+  public partial class MainWindow : System.Windows.Window
   {
     public MainWindow()
     {

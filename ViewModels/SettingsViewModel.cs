@@ -19,7 +19,7 @@ namespace WinTodoNag.ViewModels
     {
       BrowseDataFileCommand = new RelayCommand(_ =>
       {
-        var dlg = new SaveFileDialog { Filter = "YAML (*.yaml)|*.yaml", FileName = StorageService.FilePath };
+        var dlg = new Microsoft.Win32.SaveFileDialog { Filter = "YAML (*.yaml)|*.yaml", FileName = StorageService.FilePath };
         if (dlg.ShowDialog() == true) StorageService.SetFilePath(dlg.FileName);
       });
     }

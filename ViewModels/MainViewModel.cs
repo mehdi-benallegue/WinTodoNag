@@ -22,8 +22,16 @@ namespace WinTodoNag.ViewModels
       OpenSettingsCommand = new RelayCommand(_ =>
       {
         var w = new SettingsView { DataContext = SettingsVM };
-        var win = new Window { Title = "Settings", Content = w, Width = 520, Height = 260, WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner };
+        var win = new System.Windows.Window
+        {
+          Title = "Settings",
+          Content = w,
+          Width = 520,
+          Height = 260,
+          WindowStartupLocation = System.Windows.WindowStartupLocation.CenterOwner
+        };
         win.ShowDialog();
+
       });
 
 

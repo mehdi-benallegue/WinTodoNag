@@ -9,7 +9,7 @@ namespace WinTodoNag.Services
 {
   public static class SchedulerService
   {
-    private static readonly Timer _timer = new(15000); // 15s tick
+    private static readonly System.Timers.Timer _timer = new System.Timers.Timer(15000); // 15s
     private static List<TaskItem> _all = new();
 
 

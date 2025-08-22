@@ -4,7 +4,7 @@ using System.Windows;
 
 namespace WinTodoNag
 {
-  public partial class App : Application
+  public partial class App : System.Windows.Application
   {
     protected override void OnStartup(StartupEventArgs e)
     {
@@ -12,7 +12,7 @@ namespace WinTodoNag
       // Single instance
       if (!Services.SingleInstanceService.TryClaim("WinTodoNag"))
       {
-        MessageBox.Show("WinTodoNag is already running.");
+        System.Windows.MessageBox.Show("WinTodoNag is already running.");
         Shutdown();
         return;
       }

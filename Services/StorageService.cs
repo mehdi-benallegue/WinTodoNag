@@ -1,11 +1,10 @@
-using System;
+using System;                 // <-- make sure this is present
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using WinTodoNag.Models;
-
 
 namespace WinTodoNag.Services
 {
@@ -16,23 +15,25 @@ namespace WinTodoNag.Services
     public List<TaskItem> Tasks { get; set; } = new();
   }
 
-
   public static class StorageService
   {
+    // NEW: notify listeners (e.g., Calendar) when data changes
+    public static event Action? DataChanged;
+
     public static RootDoc Current { get; private set; } = new();
-    private static readonly ISerializer _ser = new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
-    private static readonly IDeserializer _des = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
+    private static readonly ISerializer _ser =
+        new SerializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
+    private static readonly IDeserializer _des =
+        new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build();
 
-
-    public static string FilePath { get; private set; } = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WinTodoNag", "todo.yaml");
-
+    public static string FilePath { get; private set; } =
+        Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "WinTodoNag", "todo.yaml");
 
     public static void SetFilePath(string path)
     {
       FilePath = path;
       Save();
     }
-
 
     public static void LoadOrInit()
     {
@@ -47,8 +48,8 @@ namespace WinTodoNag.Services
         Current = new();
         Save();
       }
+      DataChanged?.Invoke();   // << fire after loading
     }
-
 
     public static void Save()
     {
@@ -56,13 +57,14 @@ namespace WinTodoNag.Services
       Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
       var yaml = _ser.Serialize(Current);
       File.WriteAllText(FilePath, yaml);
+      DataChanged?.Invoke();   // << fire after saving
     }
-
 
     public static void RevealDataFile()
     {
       var folder = Path.GetDirectoryName(FilePath)!;
-      if (Directory.Exists(folder)) System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = folder, UseShellExecute = true });
+      if (Directory.Exists(folder))
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo { FileName = folder, UseShellExecute = true });
     }
   }
 }

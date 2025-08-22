@@ -1,33 +1,51 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WinTodoNag.Services;
 using WinTodoNag.Utils;
 
-
 namespace WinTodoNag.ViewModels
 {
-  public class CalendarCell { public DateTime Date { get; set; } public ObservableCollection<string> Entries { get; set; } = new(); }
-
-
-  public class CalendarViewModel
+  public class CalendarCell
   {
-    public DateTime CurrentMonth { get; set; } = DateTime.Now.StartOfMonth();
-    public ObservableCollection<CalendarCell> MonthCells { get; } = new();
+    public DateTime Date { get; set; }
+    public ObservableCollection<string> Entries { get; set; } = new();
+  }
 
+  public class CalendarViewModel : INotifyPropertyChanged
+  {
+    private DateTime _currentMonth = DateTime.Now.StartOfMonth();
+    public DateTime CurrentMonth
+    {
+      get => _currentMonth;
+      set
+      {
+        if (_currentMonth != value)
+        {
+          _currentMonth = value;
+          OnPropertyChanged();
+          Build();
+        }
+      }
+    }
+
+    public ObservableCollection<CalendarCell> MonthCells { get; } = new();
 
     public ICommand PrevMonthCommand { get; }
     public ICommand NextMonthCommand { get; }
 
-
     public CalendarViewModel()
     {
-      PrevMonthCommand = new RelayCommand(_ => { CurrentMonth = CurrentMonth.AddMonths(-1); Build(); });
-      NextMonthCommand = new RelayCommand(_ => { CurrentMonth = CurrentMonth.AddMonths(1); Build(); });
+      PrevMonthCommand = new RelayCommand(_ => CurrentMonth = CurrentMonth.AddMonths(-1));
+      NextMonthCommand = new RelayCommand(_ => CurrentMonth = CurrentMonth.AddMonths(1));
+
+      // Optional: rebuild when tasks change on disk
+      StorageService.DataChanged += () => Build();
+
       Build();
     }
-
 
     private void Build()
     {
@@ -46,5 +64,9 @@ namespace WinTodoNag.ViewModels
         MonthCells.Add(cell);
       }
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    private void OnPropertyChanged([CallerMemberName] string? name = null)
+        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
   }
 }

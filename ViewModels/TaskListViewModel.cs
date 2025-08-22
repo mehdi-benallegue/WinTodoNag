@@ -56,9 +56,9 @@ namespace WinTodoNag.ViewModels
       SnoozeTaskCommand = new RelayCommand(obj =>
       {
         if (obj is not TaskItem t) return;
-        var until = DateTimeExtensions.SnoozePreview(t, SnoozeChoice.Minutes(10));
+        var until = Utils.DateTimeExtensions.ApplyPreset(DateTime.Now, "10m"); // simple default snooze
         t.NextNotificationAt = until;
-        StorageService.Save();
+        Services.StorageService.Save();
       });
     }
   }
