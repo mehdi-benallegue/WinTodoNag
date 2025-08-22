@@ -1,7 +1,5 @@
 using System;
 using System.Collections.ObjectModel;
-using System.Linq;
-
 
 namespace WinTodoNag.Models
 {
@@ -10,17 +8,20 @@ namespace WinTodoNag.Models
     public string Id { get; set; } = Guid.NewGuid().ToString();
     public string Title { get; set; } = string.Empty;
     public string Notes { get; set; } = string.Empty;
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime? DeadlineAt { get; set; }
-    public DateTime FirstNotificationAt { get; set; } = DateTime.Now;
-    public DateTime NextNotificationAt { get; set; } = DateTime.Now;
-    public string NotificationMode { get; set; } = "nag"; // "toast" | "nag"
-    public DateTime? CompletedAt { get; set; }
-    public string? CompletedOrigin { get; set; } // "manual" | "recursive" | null
 
+    public DateTimeOffset CreatedAt { get; set; } = Services.TimeProvider.Now();
+    public DateTimeOffset? DeadlineAt { get; set; }
+    public DateTimeOffset FirstNotificationAt { get; set; } = Services.TimeProvider.Now();
+    public DateTimeOffset NextNotificationAt { get; set; } = Services.TimeProvider.Now();
+
+    // "toast" | "nag"
+    public string NotificationMode { get; set; } = "nag";
+
+    public DateTimeOffset? CompletedAt { get; set; }
+    // "manual" | "recursive" | null
+    public string? CompletedOrigin { get; set; }
 
     public ObservableCollection<TaskItem> Subtasks { get; set; } = new();
-
 
     public bool IsCompleted
     {
@@ -32,10 +33,9 @@ namespace WinTodoNag.Models
       }
     }
 
-
     public void MarkCompletedRecursive(bool manual)
     {
-      var now = DateTime.Now;
+      var now = Services.TimeProvider.Now();
       CompletedAt = now;
       CompletedOrigin = manual ? "manual" : "recursive";
       foreach (var c in Subtasks)
@@ -44,12 +44,10 @@ namespace WinTodoNag.Models
       }
     }
 
-
     public void UncheckWithRules()
     {
-      // Uncheck parent
-      CompletedAt = null; // origin stays as record of last state is not needed when unchecked
-                          // Uncheck only children completed recursively
+      CompletedAt = null;
+      CompletedOrigin = null;
       foreach (var c in Subtasks)
       {
         if (c.CompletedAt != null && c.CompletedOrigin == "recursive")
@@ -58,7 +56,6 @@ namespace WinTodoNag.Models
         }
       }
     }
-
 
     private void UncheckChildrenIfRecursive()
     {

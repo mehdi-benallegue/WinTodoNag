@@ -10,13 +10,15 @@ namespace WinTodoNag.ViewModels
 {
   public class CalendarCell
   {
+    // UI-friendly type
     public DateTime Date { get; set; }
     public ObservableCollection<string> Entries { get; set; } = new();
   }
 
   public class CalendarViewModel : INotifyPropertyChanged
   {
-    private DateTime _currentMonth = DateTime.Now.StartOfMonth();
+    // UI-friendly current month (DateTime); keep models offset-aware elsewhere
+    private DateTime _currentMonth = DateTimeExtensions.StartOfMonth(DateTime.Now);
     public DateTime CurrentMonth
     {
       get => _currentMonth;
@@ -41,7 +43,6 @@ namespace WinTodoNag.ViewModels
       PrevMonthCommand = new RelayCommand(_ => CurrentMonth = CurrentMonth.AddMonths(-1));
       NextMonthCommand = new RelayCommand(_ => CurrentMonth = CurrentMonth.AddMonths(1));
 
-      // Optional: rebuild when tasks change on disk
       StorageService.DataChanged += () => Build();
 
       Build();
@@ -50,23 +51,29 @@ namespace WinTodoNag.ViewModels
     private void Build()
     {
       MonthCells.Clear();
-      var first = CurrentMonth.StartOfMonth();
+      var first = DateTimeExtensions.StartOfMonth(CurrentMonth);
       var start = first.AddDays(-(int)first.DayOfWeek);
+
       for (int i = 0; i < 42; i++)
       {
         var day = start.AddDays(i);
         var cell = new CalendarCell { Date = day };
+
         foreach (var t in StorageService.Current.Tasks)
         {
-          if (t.DeadlineAt?.Date == day.Date) cell.Entries.Add($"Deadline: {t.Title}");
-          if (t.NextNotificationAt.Date == day.Date) cell.Entries.Add($"Notify: {t.Title} @ {t.NextNotificationAt:HH:mm}");
+          // Convert model's DateTimeOffset to local DateTime for UI date matching
+          if (t.DeadlineAt?.LocalDateTime.Date == day.Date)
+            cell.Entries.Add($"Deadline: {t.Title}");
+          if (t.NextNotificationAt.LocalDateTime.Date == day.Date)
+            cell.Entries.Add($"Notify: {t.Title} @ {t.NextNotificationAt:HH:mm}");
         }
+
         MonthCells.Add(cell);
       }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged([CallerMemberName] string? name = null)
-        => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+      => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
   }
 }
